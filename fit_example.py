@@ -12,7 +12,7 @@ def linear(t, m, b):
 
 x = bb.np.array([0,1,2,3,4,5,6])
 y = bb.np.array([0.1,0.9,2.1,2.9,4.1,4.9,6.1])
-xerr = 0.05
+xerr = bb.np.array([0.01,0.02,0.03,0.04,0.05,0.06,0.07])
 yerr = bb.np.array([0.01,0.02,0.03,0.04,0.05,0.06,0.07])
 
 # Note that xerr and yerr can either be an array of the same length as x&y, or a single value
