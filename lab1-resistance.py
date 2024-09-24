@@ -7,8 +7,10 @@ import numpy as np
 
 def linear(t, m, b):
     return m*t + b
+
 def rmse(observed, predicted):
     return np.sqrt(np.mean((observed - predicted) ** 2))
+
 r = bb.np.array([101.54,214.94,464.8,2694.3])
 rerr = bb.np.array([0.25,0.48,1.4,5.9])
 v1 = bb.np.array([6.499,6.500,6.502,6.502])
@@ -33,7 +35,6 @@ for i in range(len(r)):
     b = tl.error_add(verr1[i], ra)
     c = tl.error_mult(i1[i], v1[i]-(r[i]*i1[i]), ierr1[i], b, (v1[i]-(r[i]*i1[i]))/i1[i])
     finals.append((v1[i]-(r[i]*i1[i]))/i1[i])
-
     err1.append(c)
 
 avg = sum(finals)/len(finals)

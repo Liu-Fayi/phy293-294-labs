@@ -9,3 +9,8 @@ def error_mult(a, b, da, db, sol):
 def error_exp(a, da, n, sol):
     return n * sol * (da/a)
 
+def chi_squared(observed, predicted, uncertainty):
+    return np.sum((observed - predicted)**2 / uncertainty**2)
+
+def chi_squared_func(observed, independent, function, *params, uncertainty):
+    return np.sum((observed - function(independent, *params))**2 / uncertainty**2)
