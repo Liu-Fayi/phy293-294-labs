@@ -92,6 +92,8 @@ m_fit2, b_fit2 = -1.835005967853445, 6.502628691816137
 v1_pred = linear(i1, m_fit1, b_fit1)
 v2_pred = linear(i2, m_fit2, b_fit2)
 
+chi21 = tl.chi_squared(v1, v1_pred, verr1)
+chi22 = tl.chi_squared(v2, v2_pred, verr2)
 
 rmse_value1 = rmse(v1, v1_pred)
 rmse_value2 = rmse(v2, v2_pred)
@@ -99,6 +101,8 @@ rmse_value2 = rmse(v2, v2_pred)
 
 print(f"RMSE for first dataset: {rmse_value1}")
 print(f"RMSE for second dataset: {rmse_value2}")
+print(f"Chi squared for first dataset: {chi21}")
+print(f"Chi squared for second dataset: {chi22}")
 
 
 
