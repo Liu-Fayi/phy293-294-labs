@@ -21,8 +21,8 @@ def chi_squared(observed, predicted, uncertainty):
 def chi_squared_func(observed, independent, function, *params, uncertainty):
     return np.sum((observed - function(independent, *params))**2 / uncertainty**2)
 
-def reduced_chi_squared(chi2, degrees_of_freedom, data_points):
-    return chi2 / (data_points - degrees_of_freedom)
+def reduced_chi_squared(chi2, parameters, data_points):
+    return chi2 / (data_points - parameters)
 
 def rmse(observed, predicted):
     return np.sqrt(np.mean((observed - predicted) ** 2))

@@ -12,28 +12,29 @@ half_coherence_N_err = 1
 
 coherence_length = half_coherence_length * 2
 coherence_length_err = tl.error_mult(half_coherence_length, 2, half_coherence_length_err, 0, coherence_length)
-coherence_N = half_coherence_N * 2
+coherence_N = half_coherence_N * 2 / 2
 coherence_N_err = tl.error_mult(half_coherence_N, 2, half_coherence_N_err, 0, coherence_N)
 print(f"Coherence length distance: {coherence_length} +/- {coherence_length_err}")
 print(f"Coherence length wave count: {coherence_N} +/- {coherence_N_err}")
 
 dx = np.array([9, 4, 7, 12])
 N = np.array([24, 13, 20, 30,])
-Nerr = np.array([1, 1, 1, 1])
-dxerr = np.array([1, 1, 1, 1])
+Nerr = 0.75
+dxerr = 1/np.sqrt(2)
 
 dx = dx / (10**6)
 dxerr = dxerr / (10**6)
 
 initial_guess = 2648275.861687403
-bb.plot_fit(proportional, dx, N, dxerr, Nerr, init_guess=initial_guess, font_size=12, xlabel="Displacement (m)", ylabel="Number of fringes")
+bb.plot_fit(proportional, dx, N, dxerr, Nerr, init_guess=initial_guess, font_size=20, xlabel="Displacement (m)", ylabel="Number of fringes")
 
-m_fit, m_fit_err = 2648275.861687403, 113076.81171228216
+m_fit = 2648275.861687403
+N_predicted = proportional(dx, m_fit)
+m_fit_err = np.sqrt(len(dx) * ((1/(len(dx) - 2)) * np.sum((N - N_predicted) ** 2)) / (len(dx) * np.sum(dx**2) - np.sum(dx) ** 2))
+print(f"m: {m_fit} +/- {m_fit_err}")
 l = 2 / m_fit
 l_err = tl.error_mult(m_fit, 2, m_fit_err, 0, l)
 print(f"Lambda: {l} +/- {l_err}")
-
-N_predicted = proportional(dx, m_fit)
 
 rmse = tl.rmse(N, N_predicted)
 print(f"RMSE: {rmse}")

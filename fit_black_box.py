@@ -65,7 +65,7 @@ def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, f
     # Plot the best fit curve on top of the data points as a line.
     # NOTE: you may want to change the value of label to something better!!
 
-    ax1.legend(loc='upper right')
+    ax1.legend(loc='lower right')
     # Prints a box using what's in the "label" strings in the previous two lines.
     # loc specifies the location
 

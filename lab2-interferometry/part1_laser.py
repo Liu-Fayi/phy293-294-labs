@@ -7,23 +7,23 @@ def proportional(t, m):
 
 dx = np.array([9, 11, 14, 5, 17, 19])
 N = np.array([33, 43, 52, 18, 64, 71])
-Nerr = np.array([1, 1, 1, 1, 1, 1])
-dxerr = np.array([1, 1, 1, 1, 1, 1])
+Nerr = 0.75
+dxerr = 1/np.sqrt(2)
 
 dx = dx / (10**6)
 dxerr = dxerr / (10**6)
 
 initial_guess = 3700000
-bb.plot_fit(proportional, dx, N, dxerr, Nerr, init_guess=initial_guess, font_size=12, xlabel="Displacement (m)", ylabel="Number of fringes")
+bb.plot_fit(proportional, dx, N, dxerr, Nerr, init_guess=initial_guess, font_size=20, xlabel="Displacement (m)", ylabel="Number of fringes")
 
 m_fit = 3751164.958099879
-m_fit_err = 29157.296801090775
+N_predicted = proportional(dx, m_fit)
+m_fit_err = np.sqrt(len(dx) * ((1/(len(dx) - 2)) * np.sum((N - N_predicted) ** 2)) / (len(dx) * np.sum(dx**2) - np.sum(dx) ** 2))
+print(f"m: {m_fit} +/- {m_fit_err}")
 
 l = 2 / m_fit
 l_err = tl.error_mult(m_fit, 2, m_fit_err, 0, l)
 print(f"Lambda: {l} +/- {l_err}")
-
-N_predicted = proportional(dx, m_fit)
 
 rmse = tl.rmse(N, N_predicted)
 print(f"RMSE: {rmse}")
