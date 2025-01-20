@@ -27,6 +27,10 @@ log_rerr = tl.error_log(r, rerr, 10)
 
 initial_guess = [1, 1]
 bb.plot_fit(linear, log_V, log_r, log_Verr, log_rerr, init_guess=initial_guess, font_size=20, xlabel="log(V)", ylabel="log(r)")
+# bb.plot_fit(power, V, r, Verr, rerr, init_guess=initial_guess, font_size=20, xlabel="V", ylabel="r")
 
 m_fit, m_fit_err = -0.5717114960163332, 0.015307489242173648
 b_fit, b_fit_err = 0.34510471251841573, 0.12487732562755154
+
+coeff = np.exp(b_fit)
+b = 2*R*n*h/(np.sqrt(2*m*e)*coeff)
