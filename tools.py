@@ -12,6 +12,9 @@ def error_mult(a, b, da, db, sol):
 def error_exp(a, da, n, sol):
     return n * sol * (da/a)
 
+def error_exp2(a, x, dx):
+    return (a**x)*math.log(a)*dx
+
 def error_log(a, da, base):
     return log10(math.e) / log10(base) * (da/a)
 

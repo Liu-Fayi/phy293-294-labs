@@ -33,4 +33,22 @@ m_fit, m_fit_err = -0.5717114960163332, 0.015307489242173648
 b_fit, b_fit_err = 0.34510471251841573, 0.12487732562755154
 
 coeff = np.exp(b_fit)
+coeff_err = tl.error_exp2(b_fit, b_fit_err, np.exp(b_fit))
 b = 2*R*n*h/(np.sqrt(2*m*e)*coeff)
+b_err = tl.error_exp(coeff, coeff_err, -0.5, 1/coeff**0.5)
+b_err = tl.error_mult(1/coeff**0.5, 2*R*n*h/(np.sqrt(2*m*e)), b_err, 0, b)
+print(f"b: {b} +/- {b_err}")
+
+log_r_predicted = linear(log_V, m_fit, b_fit)
+
+rmse = tl.rmse(log_r, log_r_predicted)
+print(f"RMSE: {rmse}")
+
+chi2 = tl.chi_squared(log_r, log_r_predicted, log_rerr)
+print(f"Chi squared: {chi2}")
+
+red_chi2 = tl.reduced_chi_squared(chi2, 2, 12)
+print(f"Reduced chi squared: {red_chi2}")
+
+r2 = tl.r_sq(log_r, log_r_predicted)
+print(f"R^2: {r2}")
