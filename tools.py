@@ -29,3 +29,6 @@ def rmse(observed, predicted):
 
 def r_sq(observed, predicted):
     return 1 - np.sum((observed - predicted)**2) / np.sum((observed - np.mean(observed))**2)
+
+def log_log(x, y):
+    return np.log(x), np.log(y)
