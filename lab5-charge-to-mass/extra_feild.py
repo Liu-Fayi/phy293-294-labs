@@ -26,15 +26,14 @@ b_c_err = [tl.error_mult(current, R, current_err, R_err, bc) for current, curren
 print(b_c[0],b_c_err[0])
 
 #correct for the non-uniformity of the magnetic field
-b_c = [b*(1-(r**4/(R**4*(0.6583+0.29*(r**2/R**2))**2))) for b,r in zip(b_c,r)]
-
+#b_c = [b*(1-(r**4/(R**4*(0.6583+0.29*(r**2/R**2))**2))) for b,r in zip(b_c,r)]
 
 inital_guess = [1,1]
 # fit B_c to a linear function of 1/r
-bb.plot_fit(linear, 1/r, b_c, init_guess=inital_guess, font_size=20, xlabel="1/Radius (1/m)", ylabel="B_c (T)", yerror=b_c_err, xerror=[0.5/2000]*6)
+bb.plot_fit(linear, 1/r, b_c, init_guess=inital_guess, font_size=20, xlabel="1/Radius (1/m)", ylabel="B_c (T)", xerror=[0.5/2000]*6)
 
-alpha_fit,alpha_fit_unc = 0.00021821200599226923,2.233669795148888*10**-6
-b_e,b_e_unc = -7.150238088702478*10**-5,4.8827862238711655*10**-5
+alpha_fit,alpha_fit_unc = 0.0008144018676616776,6.850907260825011*10**-6
+b_e,b_e_unc = -0.025208420374544436,0.00014976036350813733
 
 rmse = tl.rmse(b_c, linear(1/r, alpha_fit,b_e))
 print(f"RMSE: {rmse}")
