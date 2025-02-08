@@ -26,6 +26,7 @@ V = V * 1000
 rerr = 0.2/1000
 Verr = 100
 
+
 log_V, log_r = tl.log_log(V, r)
 log_Verr = tl.error_log(V, Verr, math.e)
 log_rerr = tl.error_log(r, rerr, math.e)
@@ -41,7 +42,7 @@ coeff = np.exp(b_fit)
 coeff_err = tl.error_exp2(math.e, b_fit, b_fit_err)
 d = 2*R*n*h/(np.sqrt(2*m*e)*coeff)
 d_err = tl.error_exp(coeff, coeff_err, -0.5, 1/coeff**0.5)
-d_err = tl.error_mult(1/coeff**0.5, 2*R*n*h/(np.sqrt(2*m*e)), d_err, 0, b)
+d_err = tl.error_mult(1/coeff**0.5, 2*R*n*h/(np.sqrt(2*m*e)), d_err, 0, d)
 print(f"b: {d} +/- {d_err}")
 
 log_r_predicted = linear(log_V, m_fit, b_fit)
