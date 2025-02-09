@@ -26,13 +26,34 @@ print(b_c[0],b_c_err[0])
 
 #correct for the non-uniformity of the magnetic field
 b_c = [b*(1-(r**4/(R**4*(0.6583+0.29*(r**2/R**2))**2))) for b,r in zip(b_c,r)]
+# Calculate error propagation for the magnetic field correction
+# Using partial derivatives for the correction factor
+correction_errors = []
+for b, b_err, r_val, r_error in zip(b_c, b_c_err, r, r_err):
+    # Define correction factor terms for clarity
+    r4 = r_val**4
+    R4 = R**4
+    r2_R2 = (r_val**2)/(R**2)
+    denom = (0.6583 + 0.29*r2_R2)**2
+    
+    # Partial derivatives
+    db = (1 - r4/(R4*denom))
+    dr = b*(-4*r_val**3/(R4*denom) + 2*r4*0.29/(R4*denom**2 * R**2))
+    
+    # Combine errors using quadrature
+    total_error = np.sqrt((db*b_err)**2 + (dr*r_error)**2)
+    correction_errors.append(total_error)
 
+b_c_err = correction_errors
+
+  
 inital_guess = [1,1]
 # fit B_c to a linear function of 1/r
-bb.plot_fit(linear, 1/r, b_c, init_guess=inital_guess, font_size=20, xlabel="1/Radius (1/m)", ylabel="B_c (T)", xerror=[0.5/2000]*6,filename="extra_field_fit.png")
+fit, unc = bb.plot_fit(linear, 1/r, b_c, init_guess=inital_guess, font_size=20, xlabel="1/Radius (1/m)", ylabel="B_c (T)", xerror=[0.5/2000]*6,yerror=b_c_err,filename="extra_field_fit.png")
 
-alpha_fit,alpha_fit_unc = 4.545926301134504*10**-5 ,5.814535473517166*10**-7
-b_e,b_e_unc = -6.85323006340271*10**-5, 1.2710535253099034*10**-5
+alpha_fit, b_e = fit
+alpha_err, b_e_err = unc
+
 
 rmse = tl.rmse(b_c, linear(1/r, alpha_fit,b_e))
 print(f"RMSE: {rmse}")

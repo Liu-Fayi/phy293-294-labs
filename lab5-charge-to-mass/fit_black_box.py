@@ -28,13 +28,16 @@ def load_data(filename):
 
 
 def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, font_size=14,
-             xlabel="Independant Variable (units)", ylabel="Dependent Variable (units)",filename="graph.png"):    
+             xlabel="Independant Variable (units)", ylabel="Dependent Variable (units)",filename="graph.png",bounded=False,bounds=None): 
     plt.rcParams.update({'font.size': font_size})
     plt.rcParams['figure.figsize'] = 10, 9
     # Change the fontsize of the graphs to make it easier to read.
     # Also change the picture size, useful for the save-to-file option.
-               
-    popt, pcov = optimize.curve_fit(my_func, xdata, ydata, sigma=yerror, p0=init_guess)
+    if bounded:
+        popt, pcov = optimize.curve_fit(my_func, xdata, ydata, sigma=yerror, p0=init_guess, bounds=bounds)
+    else:
+        popt, pcov = optimize.curve_fit(my_func, xdata, ydata, sigma=yerror, p0=init_guess)
+
     # The best fit values are popt[], while pcov[] tells us the uncertainties.
 
     puncert = np.sqrt(np.diagonal(pcov))
@@ -100,6 +103,6 @@ def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, f
     # every time you run this program, so rename the file if you
     # want to keep multiple files!
 
-    return None
+    return popt, puncert
     
 

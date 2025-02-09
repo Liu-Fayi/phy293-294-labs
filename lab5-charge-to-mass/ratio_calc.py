@@ -1,37 +1,63 @@
 import math
-
 import tools as tl
 import fit_black_box as bb
 import numpy as np
 
-mue_0 = 4 * math.pi * 10**-7
-R = 0.326/2
-R_err = 0.005/2
+# Constants and measured values
+mue_0 = 4 * math.pi * 10**-7         
+R = 0.326/2                          
+R_err = 0.005/2                      
 n = 130
 
-b_e,b_e_unc = 6.85323006340271*10**-5, 1.2710535253099034*10**-5
+# Field offset values from extra_field analysis
+b_e, b_e_unc = 7.279481489311506e-5, 1.313424340798893e-5 
 k = 1/math.sqrt(2) * (4/5)**(3/2) * mue_0 * n / R
-k_err = tl.error_mult(1/math.sqrt(2), (4/5)**(3/2) * mue_0 * n / R, 0, R_err, k)
+k_err = k * (R_err/R)
+
+# Calculate I_o = b_e/k with standard propagation for a quotient:
+
 I_o = b_e/k
-I_o_err = tl.error_mult(b_e, k, b_e_unc, k_err, I_o)
+I_o_err = I_o * np.sqrt((b_e_unc/b_e)**2 + (k_err/k)**2)
 
-##calculation of constant with fixed current fit
-i = 1.076
-a,a_err = 0.004006761994742138, 4.674028233227996*10**-5
-e_ratio_I = 1/((a*k)*(i+1/math.sqrt(2)*I_o))**2
-e_ratio_I_err = tl.error_mult(i, a*k, 0.001, a_err, e_ratio_I)
+print(f"k = {k:.2e} +/- {k_err:.2e}")
+print(f"I_o relative error: {I_o_err/I_o:.2e}")
 
-print(f"Fixed current fit: {e_ratio_I} +/- {e_ratio_I_err}")
+# ---------------------------
+# Fixed-current fit propagation:
+i = 1.076                
+a, a_err = 0.004006761994742138,  4.674028233227996e-5
 
-##calculation of constant with fixed voltage fit
-v = 186.01
-a_fit,a_fit_unc = 0.004738608386267347, 0.0007849603700117398
-b_fit,b_fit_unc = 0.028217571546591925, 0.015467814817588977
+# Define X = (a*k) * ( i + 1/sqrt2 * I_o )
+term1 = a * k
+term1_rel = np.sqrt((a_err/a)**2 + (k_err/k)**2)
+term2 = i + (1/math.sqrt(2))*I_o
+# Assume i is exact so its uncertainty comes solely from I_o:
+term2_err = (1/math.sqrt(2)) * I_o_err
+term2_rel = term2_err/term2
 
-e_ratio_V = 1/(a_fit*k)**2
-e_ratio_V_err = tl.error_mult(v, a_fit*k, 0.01, a_fit_unc, e_ratio_V)
+X = term1 * term2
+X_rel = np.sqrt(term1_rel**2 + term2_rel**2)
 
-print(f"Fixed voltage fit: {e_ratio_V} +/- {e_ratio_V_err}")
+e_ratio_I = 1/(X**2)
+e_ratio_I_err = 2 * e_ratio_I * X_rel
+
+print(f"Fixed current fit: e/m = {e_ratio_I:.2e} +/- {e_ratio_I_err:.2e}")
+
+# ---------------------------
+# Fixed-voltage fit propagation:
+v = 186.01                            
+a_fit, a_fit_unc = 0.0640095857828037, 0.0016815877487173848
+
+# For fixed-voltage method assume:
+# e_ratio_V = 1/(a_fit * k)^2.
+X_v = a_fit/(math.sqrt(v)) * k
+
+X_v_rel = np.sqrt((a_fit_unc/a_fit)**2 + (k_err/k)**2 + (0.01/v)**2)
+
+e_ratio_V = 1/(X_v**2)
+e_ratio_V_err = 2 * e_ratio_V * X_v_rel
+
+print(f"Fixed voltage fit: e/m = {e_ratio_V:.2e} +/- {e_ratio_V_err:.2e}")
 
 #compare to the accepted value
 accepted = 1.758820024*10**11
@@ -43,18 +69,36 @@ percent_error_V = abs(e_ratio_V - accepted)/accepted
 percent_error_I *= 100
 percent_error_V *= 100
 
-print(f"Percent error for fixed current fit: {percent_error_I}")
-print(f"Percent error for fixed voltage fit: {percent_error_V}")
+print(f"Percent error for fixed current fit: {percent_error_I:.3f}%")
+print(f"Percent error for fixed voltage fit: {percent_error_V:.3f}%")
 
-#avg and std dev
-avg = (e_ratio_I + e_ratio_V)/2
-avg_err = math.sqrt(e_ratio_I_err**2 + e_ratio_V_err**2)/2
 
-print(f"Average: {avg} +/- {avg_err}")
+avg_ratio = (e_ratio_I + e_ratio_V)/2
+avg_ratio_err = np.sqrt(e_ratio_I_err**2 + e_ratio_V_err**2)/2
 
-percent_error_avg = abs(avg - accepted)/accepted
-percent_error_avg *= 100
-print(f"Percent error for average: {percent_error_avg}")
+print(f"Average e/m ratio: {avg_ratio:.4e} +/- {avg_ratio_err:.4e}")
+print(f"Percent error for average: {abs(avg_ratio - accepted)/accepted*100:.3f}%")
+
+
+print("Percent uncertainty for fixed current fit: ", format(e_ratio_I_err/e_ratio_I*100,".2f"))
+print("Percent uncertainty for fixed voltage fit: ", format(e_ratio_V_err/e_ratio_V*100,".2f"))
+print("Percent uncertainty for average: ", format(avg_ratio_err/avg_ratio*100,".2f"))
+
+
+# vizualize the data and unc in comparison to the accepted value
+import matplotlib.pyplot as plt
+
+plt.errorbar([1,2,3],[e_ratio_I, e_ratio_V,avg_ratio], yerr=[e_ratio_I_err, e_ratio_V_err,avg_ratio_err], fmt='o', label="Calculated values")
+plt.axhline(y=accepted, color='r', linestyle='-', label="Accepted value")
+plt.xlabel("Method")
+plt.xticks([1,2,3],["Fixed current", "Fixed voltage", "Average"])
+plt.ylabel("e/m ratio")
+plt.title("e/m ratio calculated using two methods")
+plt.legend()
+
+
+
+plt.show()
 
 
 

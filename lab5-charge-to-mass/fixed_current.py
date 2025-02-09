@@ -22,21 +22,21 @@ v = np.array([216.99, 188,151.99, 122.99,100.97,88.96])
 r = np.array([0.06,0.055,0.05,0.045,0.04,0.035])
 i = 1.076
 v_err = [0.01]*6
-r_err = [0.0005/2]*6
+r_err = [0.0005]*6
 
 
 
 initial_guess = [1]
-bb.plot_fit(fit_function,v,r,v_err,r_err, init_guess=initial_guess, font_size=20, xlabel="Voltage (V)", ylabel="Radius (m)",filename="fixed_voltage_fit.png")
+fit, unc = bb.plot_fit(fit_function,v,r,v_err,r_err, init_guess=initial_guess, font_size=20, xlabel="Voltage (V)", ylabel="Radius (m)",filename="fixed_voltage_fit.png")
 
 
-a_fit = 0.004006761994742138
-a_fit_err = 4.674028233227996 *10**-5
+a_I_fit = fit[0]
+a_I_fit_err = unc[0]
 
-rmse = tl.rmse(r, fit_function(v, a_fit))
+rmse = tl.rmse(r, fit_function(v, a_I_fit))
 print(f"RMSE: {rmse}")
 
-chi_squared = tl.chi_squared(r, fit_function(v, a_fit), 0.0005/2)
+chi_squared = tl.chi_squared(r, fit_function(v, a_I_fit), 0.0005)
 print(f"Chi squared: {chi_squared}")
 
 reduced_chi_squared = tl.reduced_chi_squared(chi_squared, 1, 6)
