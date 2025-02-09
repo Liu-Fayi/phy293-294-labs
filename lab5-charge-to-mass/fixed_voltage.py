@@ -5,7 +5,7 @@ import fit_black_box as bb
 import numpy as np
 
 mue_0 = 4 * math.pi * 10**-7
-R = 0.0326
+R = 0.326/2
 
 n = 130
 def inverse(t, a,b):

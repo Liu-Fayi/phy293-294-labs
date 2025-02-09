@@ -5,7 +5,7 @@ import fit_black_box as bb
 import numpy as np
 
 mue_0 = 4 * math.pi * 10**-7
-R = 0.0326
+R = 0.326/2
 R_err = .5/2000
 
 n = 130
@@ -26,14 +26,14 @@ b_c_err = [tl.error_mult(current, R, current_err, R_err, bc) for current, curren
 print(b_c[0],b_c_err[0])
 
 #correct for the non-uniformity of the magnetic field
-#b_c = [b*(1-(r**4/(R**4*(0.6583+0.29*(r**2/R**2))**2))) for b,r in zip(b_c,r)]
+b_c = [b*(1-(r**4/(R**4*(0.6583+0.29*(r**2/R**2))**2))) for b,r in zip(b_c,r)]
 
 inital_guess = [1,1]
 # fit B_c to a linear function of 1/r
 bb.plot_fit(linear, 1/r, b_c, init_guess=inital_guess, font_size=20, xlabel="1/Radius (1/m)", ylabel="B_c (T)", xerror=[0.5/2000]*6)
 
 alpha_fit,alpha_fit_unc = 0.0008144018676616776,6.850907260825011*10**-6
-b_e,b_e_unc = -0.025208420374544436,0.00014976036350813733
+b_e,b_e_unc = 6.85323006340271*10**-5, 1.2710535253099034*10**-5
 
 rmse = tl.rmse(b_c, linear(1/r, alpha_fit,b_e))
 print(f"RMSE: {rmse}")

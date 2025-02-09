@@ -5,7 +5,7 @@ import fit_black_box as bb
 import numpy as np
 
 mue_0 = 4 * math.pi * 10**-7
-R = 0.0326
+R = 0.326/2
 n = 130
 i = 1.076
 
@@ -20,7 +20,7 @@ def fit_function(delta_v, a):
 
 v = np.array([216.99, 188,151.99, 122.99,100.97,88.96])
 r = np.array([0.06,0.055,0.05,0.045,0.04,0.035])
-
+i = 1.076
 v_err = [0.01]*6
 r_err = [0.5/2000]*6
 
