@@ -28,7 +28,7 @@ def load_data(filename):
 
 
 def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, font_size=14,
-             xlabel="Independant Variable (units)", ylabel="Dependent Variable (units)"):    
+             xlabel="Independant Variable (units)", ylabel="Dependent Variable (units)",filename="graph.png"):    
     plt.rcParams.update({'font.size': font_size})
     plt.rcParams['figure.figsize'] = 10, 9
     # Change the fontsize of the graphs to make it easier to read.
@@ -95,7 +95,7 @@ def plot_fit(my_func, xdata, ydata, xerror=None, yerror=None, init_guess=None, f
     plt.show()
     # Show the graph on your screen.
 
-    fig.savefig("graph.png")
+    fig.savefig(filename)
     # This saves the graph as a file, which will get overwritten
     # every time you run this program, so rename the file if you
     # want to keep multiple files!

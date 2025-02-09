@@ -18,7 +18,6 @@ r = np.array([0.059,0.055,0.05,0.045,0.04,0.037])
 
 r_err = [0.5/2000]*6
 i_err = [0.001]*6
-
 v = 186.01
 
 b_c = [((4/5)**(3/2)) * (mue_0*n*i)/R  for i in i]
@@ -30,12 +29,19 @@ b_c = [b*(1-(r**4/(R**4*(0.6583+0.29*(r**2/R**2))**2))) for b,r in zip(b_c,r)]
 
 inital_guess = [1,1]
 # fit B_c to a linear function of 1/r
-bb.plot_fit(linear, 1/r, b_c, init_guess=inital_guess, font_size=20, xlabel="1/Radius (1/m)", ylabel="B_c (T)", xerror=[0.5/2000]*6)
+bb.plot_fit(linear, 1/r, b_c, init_guess=inital_guess, font_size=20, xlabel="1/Radius (1/m)", ylabel="B_c (T)", xerror=[0.5/2000]*6,filename="extra_field_fit.png")
 
-alpha_fit,alpha_fit_unc = 0.0008144018676616776,6.850907260825011*10**-6
-b_e,b_e_unc = 6.85323006340271*10**-5, 1.2710535253099034*10**-5
+alpha_fit,alpha_fit_unc = 4.545926301134504*10**-5 ,5.814535473517166*10**-7
+b_e,b_e_unc = -6.85323006340271*10**-5, 1.2710535253099034*10**-5
 
 rmse = tl.rmse(b_c, linear(1/r, alpha_fit,b_e))
 print(f"RMSE: {rmse}")
+
+chi_squared = tl.chi_squared(b_c, linear(1/r, alpha_fit,b_e), 0.0005/2)
+print(f"Chi squared: {chi_squared}")
+
+reduced_chi_squared = tl.reduced_chi_squared(chi_squared, 2, 6)
+print(f"Reduced chi squared: {reduced_chi_squared}")
+
 
 
