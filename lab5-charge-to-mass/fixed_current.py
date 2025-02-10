@@ -27,7 +27,7 @@ r_err = [0.0005]*6
 
 
 initial_guess = [1]
-fit, unc = bb.plot_fit(fit_function,v,r,v_err,r_err, init_guess=initial_guess, font_size=20, xlabel="Voltage (V)", ylabel="Radius (m)",filename="fixed_voltage_fit.png")
+fit, unc = bb.plot_fit(fit_function,v,r,v_err,r_err, init_guess=initial_guess, font_size=20, xlabel="Voltage (V)", ylabel="Radius (m)",filename="fixed_current_fit.png")
 
 
 a_I_fit = fit[0]

@@ -22,6 +22,8 @@ I_o_err = I_o * np.sqrt((b_e_unc/b_e)**2 + (k_err/k)**2)
 print(f"k = {k:.2e} +/- {k_err:.2e}")
 print(f"I_o relative error: {I_o_err/I_o:.2e}")
 
+print("I_o: ", I_o, "+/-", I_o_err)
+
 # ---------------------------
 # Fixed-current fit propagation:
 i = 1.076                
@@ -83,6 +85,12 @@ print(f"Percent error for average: {abs(avg_ratio - accepted)/accepted*100:.3f}%
 print("Percent uncertainty for fixed current fit: ", format(e_ratio_I_err/e_ratio_I*100,".2f"))
 print("Percent uncertainty for fixed voltage fit: ", format(e_ratio_V_err/e_ratio_V*100,".2f"))
 print("Percent uncertainty for average: ", format(avg_ratio_err/avg_ratio*100,".2f"))
+
+
+
+print(f"Fixed current fit: e/m = {e_ratio_I:.2e} +/- {e_ratio_I_err:.2e} eV/T")
+print(f"Fixed voltage fit: e/m = {e_ratio_V:.2e} +/- {e_ratio_V_err:.2e} eV/T")
+
 
 
 # vizualize the data and unc in comparison to the accepted value

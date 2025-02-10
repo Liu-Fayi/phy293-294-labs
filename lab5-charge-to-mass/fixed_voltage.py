@@ -30,7 +30,7 @@ v = 186.01
 
 
 inital_guess = [1,I_o]
-fit, unc = bb.plot_fit(inverse, i, r, init_guess=inital_guess, font_size=20, xlabel="Current (A)", ylabel="Radius (m)", xerror=[0.001]*6, yerror=[0.0005]*6, filename="fixed_current_fit.png",bounded=True,bounds=([-np.inf,I_o-I_o_err],[+np.inf,I_o+I_o_err]))
+fit, unc = bb.plot_fit(inverse, i, r, init_guess=inital_guess, font_size=20, xlabel="Current (A)", ylabel="Radius (m)", xerror=[0.001]*6, yerror=[0.0005]*6, filename="fixed_voltage_fit.png",bounded=True,bounds=([-np.inf,I_o-I_o_err],[+np.inf,I_o+I_o_err]))
 
 a_fit, I_o = fit
 a_fit_err, I_o_err = unc
