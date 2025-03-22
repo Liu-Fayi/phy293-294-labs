@@ -9,12 +9,12 @@ def linear(x, m,b):
     return x * m + b
 
 # Dimensions 
-width = 2.38e-2     # meters
+width = 16.25e-2     # meters
 width_err = 0.05e-2 # meters
 
 # Calculate thickness 
-thickness = (2 / 26.15e-3) * 2945E-10   # meters
-thickness_err = tools.error_mult(2945E-10, 2 / 26.15e-3, 0, 0.05e-3, sol=thickness)
+thickness = (2 / 26.15e-2) * 2945E-10   # meters
+thickness_err = tools.error_mult(2945E-10, 2 / 26.15e-2, 0, 0.05e-2, sol=thickness)
 
 # Currents and voltages 
 currents = [9.93, 14.96, 19.98, 24.97, 29.95]  # in mA
