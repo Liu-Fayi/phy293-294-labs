@@ -42,7 +42,7 @@ print(f"Chi squared: {chi_squared}")
 reduced_chi_squared = tl.reduced_chi_squared(chi_squared, 1, 6)
 print(f"Reduced chi squared: {reduced_chi_squared}")
 
-
+print(tl.r_sq(r, fit_function(v, a_I_fit)))
 
 
 

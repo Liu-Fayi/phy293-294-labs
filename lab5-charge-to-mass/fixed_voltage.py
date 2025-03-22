@@ -45,3 +45,4 @@ reduced_chi_squared = tl.reduced_chi_squared(chi_squared, 2, 6)
 print(f"Reduced chi squared: {reduced_chi_squared}")
 
 
+print(tl.r_sq(r, inverse(i, a_fit, I_o)))

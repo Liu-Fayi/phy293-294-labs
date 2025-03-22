@@ -27,7 +27,6 @@ print(b_c[0],b_c_err[0])
 #correct for the non-uniformity of the magnetic field
 b_c = [b*(1-(r**4/(R**4*(0.6583+0.29*(r**2/R**2))**2))) for b,r in zip(b_c,r)]
 # Calculate error propagation for the magnetic field correction
-# Using partial derivatives for the correction factor
 correction_errors = []
 for b, b_err, r_val, r_error in zip(b_c, b_c_err, r, r_err):
     # Define correction factor terms for clarity
@@ -58,7 +57,7 @@ alpha_err, b_e_err = unc
 rmse = tl.rmse(b_c, linear(1/r, alpha_fit,b_e))
 print(f"RMSE: {rmse}")
 
-chi_squared = tl.chi_squared(b_c, linear(1/r, alpha_fit,b_e), 0.0005/2)
+chi_squared = tl.chi_squared(b_c, linear(1/r, alpha_fit,b_e), np.array(b_c_err))
 print(f"Chi squared: {chi_squared}")
 
 reduced_chi_squared = tl.reduced_chi_squared(chi_squared, 2, 6)
@@ -66,3 +65,5 @@ print(f"Reduced chi squared: {reduced_chi_squared}")
 
 
 
+
+print(tl.r_sq(b_c, linear(1/r, alpha_fit,b_e)))
