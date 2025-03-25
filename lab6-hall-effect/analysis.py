@@ -10,11 +10,11 @@ def linear(x, m,b):
 
 # Dimensions 
 width = 16.25e-2     # meters
-width_err = 0.05e-2 # meters
+width_err = 0.005e-2 # meters
 
 # Calculate thickness 
 thickness = (2 / 26.15e-2) * 2945E-10   # meters
-thickness_err = tools.error_mult(2945E-10, 2 / 26.15e-2, 0, 0.05e-2, sol=thickness)
+thickness_err = tools.error_mult(2945E-10, 2 / 26.15e-2, 0, 0.005e-2, sol=thickness)
 
 # Currents and voltages 
 currents = [9.93, 14.96, 19.98, 24.97, 29.95]  # in mA
@@ -37,15 +37,14 @@ for key in voltages.keys():
 # Propagate uncertainty in Ey
 E_y_err = {}
 for key in voltages.keys():
-    E_y_err[key] = [tools.error_mult(v * 1E-3, width, 0.05E-3, width_err, sol=v * 1E-3 / width) for v in voltages[key]]
+    E_y_err[key] = [tools.error_mult(v * 1E-3, width, 0.00035E-3, width_err, sol=v * 1E-3 / width) for v in voltages[key]]
 
 m = {}
-b = {}
 chi2 = {}
 red_chi2 = {}
 for key in voltages.keys():
     popt, perr = bb.plot_fit(linear, Jx, E_y[key], Jx_err, E_y_err[key],
-                             init_guess=[1E-9,0],  # Adjusted for expected order of magnitude
+                             init_guess=[1E-11,0], 
                              xlabel="Jx (A/m^2)",
                              ylabel="Ey (V/m)",
                              filename="graph" + str(key) + ".png")
@@ -65,7 +64,6 @@ for key in voltages.keys():
     Rh_value = m[key][0] / (key * 10**-3)  # Convert key from mT to T
     Rh.append(Rh_value)
     print(f"Rh for {key} mT: {Rh_value:.3e} m^3/C")
-
 # Average Rh and compute uncertainty
 Rh_mean = np.mean(Rh)
 Rh_std = np.std(Rh, ddof=1) / np.sqrt(len(Rh))  # Standard error of the mean
